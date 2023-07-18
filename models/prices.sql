@@ -1,7 +1,7 @@
 with source as (
-    
+
     select * from {{ source('house_price_data', 'prices') }}
-    
+
 ),
 seed_property_type as (
     select * from {{ ref('property_type') }}
@@ -20,18 +20,18 @@ seed_record_status_type as (
 ),
 
 renamed as (
-    
+
     select
         transaction_id,
         cast(price as integer),
         postcode,
         date_of_transfer,
         seed_property_type.value as property_type,
-        seed_ppd_category_type.value as ppd_category, 
-        seed_old_new_type.value as old_or_new, 
-        seed_duration_type.value as duration, 
+        seed_ppd_category_type.value as ppd_category,
+        seed_old_new_type.value as old_or_new,
+        seed_duration_type.value as duration,
         seed_record_status_type.value as record_status
-    
+
     from source
     left join seed_property_type on source.property_type = seed_property_type.key
     left join seed_ppd_category_type on source.ppd_category_type = seed_ppd_category_type.key
